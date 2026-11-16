@@ -3,6 +3,9 @@ import { state, set, emit, log } from './store.js';
 import { confirmBox, toast, money } from './ui.js';
 
 const TOKEN = document.querySelector('meta[name="suite-token"]')?.content || '';
+// When the page is not served by the local helper (for example the online demo), the token
+// placeholder is never filled in. Then the app runs in Demo mode only and makes no API calls.
+export const HOSTED = !TOKEN || TOKEN.startsWith('__');
 
 export class ApiError extends Error {
   constructor(message, status) { super(message); this.status = status; }
@@ -29,6 +32,7 @@ export async function api(path, body) {
 }
 
 export async function refreshServer() {
+  if (HOSTED) return null;
   try {
     const s = await api('state');
     set({ server: s, serverDown: false });

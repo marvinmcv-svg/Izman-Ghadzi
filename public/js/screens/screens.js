@@ -1,7 +1,7 @@
 // Home, Settings, Unibox, hustle picker, Summary and the PDF view.
 import { state, set, refresh, isDemo, log, persist } from '../core/store.js';
 import { esc, icon, pill, money, fmt, toolLogo, TOOLS, copyBtn, toast, confirmBox, short } from '../core/ui.js';
-import { api, refreshServer } from '../core/api.js';
+import { api, refreshServer, HOSTED } from '../core/api.js';
 import { coverSVG, foodSVG, hustlePreview, chapterArt } from '../core/art.js';
 import { STEPS, BY_KEY, trackSteps, stepRoute, isDone, statusPill, toolStatus } from '../steps/frame.js';
 import { repliesFor, isUnread, markRead, OUT_KEYS } from '../steps/outreach.js';
@@ -93,7 +93,7 @@ export function settings() {
   const cur = set_.defaultModel || 'claude-opus-5-5';
   const robots = s?.robots || [];
   return `<div class="page enter">
-    ${state.serverDown ? helperBanner() : ''}
+    ${HOSTED ? `<div class="banner info">${icon('info', 'style="width:18px;height:18px;flex:none"')}<div>This is the online demo. Keys are never pasted here. To use Live mode with your own keys, run the app on your computer: <code>npm install</code> then <code>npm start</code>.</div></div>` : state.serverDown ? helperBanner() : ''}
     <div class="eyebrow">Settings</div>
     <h1 class="h-title">Settings and keys</h1>
     <p class="lede">Paste a key once. Every tool uses it. You can also paste keys right on the step that needs them.</p>

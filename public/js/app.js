@@ -1,7 +1,7 @@
 // Product Suite: the shell, router and global actions.
 import { state, set, subscribe, emit, refresh, setTheme, log, isDemo, persist, ui, setUi } from './core/store.js';
 import { esc, icon, pill, money, toast, copyText, modal, confirmBox, toolLogo, TOOLS } from './core/ui.js';
-import { api, refreshServer, spendText, spentValue, ApiError } from './core/api.js';
+import { api, refreshServer, spendText, spentValue, ApiError, HOSTED } from './core/api.js';
 import { STEPS, BY_KEY, SECTIONS, stepsIn, trackSteps, isDone, frame, stepRoute, sectionDone, toolStatus, nextStep } from './steps/frame.js';
 import './steps/build.js';
 import './steps/outreach.js';
@@ -217,6 +217,10 @@ async function keyAction(kind, tool, btn) {
 // ---------- mode ----------
 async function setMode(mode) {
   if (mode === state.mode) return;
+  if (HOSTED && mode === 'live') {
+    await confirmBox({ title: 'Live mode runs on your computer', intro: 'This online version is a demo. Live mode uses your own API keys, so it only runs on your own computer, where the keys stay private. Download the app, run "npm install" and "npm start", then switch to Live there.', yes: 'Got it' });
+    return;
+  }
   if (ctl.tour) { ctl.stop = true; ctl.skip = true; }
   set({ mode });
   if (mode === 'live') {
